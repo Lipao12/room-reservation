@@ -14,6 +14,7 @@ from main.models.repositories.room_repository import RoomRepository
 # Importação dos Controllers
 from main.controllers.room_creator import RoomCreator
 from main.controllers.room_finder import RoomFinder 
+
 def get_room_repository():
     conn = db_connection_handler.get_connection()
     return RoomRepository(conn)
