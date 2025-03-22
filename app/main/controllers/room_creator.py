@@ -30,7 +30,7 @@ class RoomCreator:
         try:
             self.room_repository.delete_room(room_id)
             return{
-                'body': {"room_id": id, "message": "Deletado com sucesso!"},
+                'body': {"room_id": room_id, "message": "Deletado com sucesso!"},
                 'status_code': 201
             }
 

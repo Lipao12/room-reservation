@@ -28,6 +28,8 @@ class DbConnectionHandler:
         except OperationalError as e:
             print(f"Erro ao conectar ao PostgreSQL: {e}")
     def get_connection(self):
+        if self.__conn is None:
+            self.connect()
         return self.connection
 
 db_connection_handler = DbConnectionHandler()

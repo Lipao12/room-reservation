@@ -7,19 +7,21 @@ class RoomFinder:
 
     def find_all(self)->Dict:
         try:
-            room = self.room_repository.find_rooms()
-            if not room:
+            rooms = self.room_repository.find_rooms()
+            if not rooms:
                 return {
                     "body": {"error": "Sala não encontrada"},
                     "status_code": 404
                 }
-            room_info = {
-                "id": room[0], 
-                "name": room[1], 
-                "capacity": room[2], 
-            }
+            rooms_info = [
+                        {
+                            "id": room[0], 
+                            "name": room[1], 
+                            "capacity": room[2]
+                        } for room in rooms
+                    ]
             return {
-                "body": {"room": room_info, },
+                "body": {"room": rooms_info, },
                 "status_code": 200
                 } 
         except Exception as exception:
@@ -31,6 +33,7 @@ class RoomFinder:
     def find_one(self, room_id)->Dict:
         try:
             room = self.room_repository.find_expecific_room(room_id)
+            print(room)
             if not room:
                 return {
                     "body": {"error": "Sala não encontrada"},
