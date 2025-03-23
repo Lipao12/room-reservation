@@ -71,6 +71,16 @@ class ReservationRepository:
             )
             rooms = cursor.fetchall()
         return rooms
+
+    def get_reservations_by_room(self, room_id: str) -> List:
+        with self.conn.cursor() as cursor:
+            cursor.execute(
+                '''
+                SELECT * FROM reservation WHERE room_id=%s
+                ''', (room_id,)
+            )
+            rooms = cursor.fetchall()
+        return rooms
     
     def get_reservation_by_id(self, reservation_id: str) -> List:
         with self.conn.cursor() as cursor:

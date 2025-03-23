@@ -13,6 +13,7 @@ from main.models.repositories.reservation_repository import ReservationRepositor
 
 # Importação dos Controllers
 from main.controllers.reservation_creator import ReservationCreator
+from main.controllers.reservation_finder import ReservationFinder
 
 def get_reservation_repository():
     conn = db_connection_handler.get_connection()
@@ -31,7 +32,7 @@ async def create_reservation(reservation_data: Dict = Body(), reservation_reposi
     return JSONResponse(content=response['body'], status_code=response['status_code'])
 
 @router.delete("/reservations/{id}")
-async def delete_rooms(id: str, reservation_repository: ReservationRepository = Depends(get_reservation_repository)):
+async def delete_reservation(id: str, reservation_repository: ReservationRepository = Depends(get_reservation_repository)):
     """
     Deleta uma sala específica pelo ID.
     """
@@ -41,3 +42,41 @@ async def delete_rooms(id: str, reservation_repository: ReservationRepository = 
         raise HTTPException(status_code=response['status_code'], detail=response['body'])
     return JSONResponse(content=response['body'], status_code=response['status_code'])
 
+@router.get("/reservations/{id}")
+async def get_reservation_by_id(id: str, reservation_repository: ReservationRepository = Depends(get_reservation_repository)):
+    """
+    Obtém uma reserva específica pelo ID.
+
+    Retorna um JSON com os dados da sala e o código de status 200.
+    """
+    controller = ReservationFinder(reservation_repository)
+    response = controller.find_by_id(reservation_id=id)
+    if not response['body']:
+        raise HTTPException(status_code=404, detail=f"Reservation with ID {id} not found.")
+    return JSONResponse(content=response['body'], status_code=response['status_code'])
+
+@router.get("/reservations/user/{id}")
+async def get_reservation_by_user(id: str, reservation_repository: ReservationRepository = Depends(get_reservation_repository)):
+    """
+    Obtém uma reserva por usuário.
+
+    Retorna um JSON com os dados da sala e o código de status 200.
+    """
+    controller = ReservationFinder(reservation_repository)
+    response = controller.find_by_user(user_id=id)
+    if not response['body']:
+        raise HTTPException(status_code=404, detail=f"No reservation")
+    return JSONResponse(content=response['body'], status_code=response['status_code'])
+
+@router.get("/reservations/room/{id}")
+async def get_reservation_by_room(id: str, reservation_repository: ReservationRepository = Depends(get_reservation_repository)):
+    """
+    Obtém uma reserva por usuário.
+
+    Retorna um JSON com os dados da sala e o código de status 200.
+    """
+    controller = ReservationFinder(reservation_repository)
+    response = controller.find_by_room(room_id=id)
+    if not response['body']:
+        raise HTTPException(status_code=404, detail=f"No reservation")
+    return JSONResponse(content=response['body'], status_code=response['status_code'])

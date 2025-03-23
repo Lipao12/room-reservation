@@ -34,7 +34,7 @@ async def get_rooms(room_repository: RoomRepository = Depends(get_room_repositor
 
 
 @router.get("/rooms/{id}")
-async def get_rooms(id: str, room_repository: RoomRepository = Depends(get_room_repository)):
+async def get_room_by_id(id: str, room_repository: RoomRepository = Depends(get_room_repository)):
     """
     Obtém uma sala específica pelo ID.
 
