@@ -1,3 +1,4 @@
+from main.routes.websocket import notify_clients
 from fastapi import Depends, APIRouter, Body, HTTPException
 from fastapi.responses import JSONResponse
 from typing import Dict
@@ -28,6 +29,8 @@ async def create_reservation(reservation_data: Dict = Body(), reservation_reposi
     response = controller.create(reservation_data)
     if not response['body']:
         raise HTTPException(status_code=404, detail=f"Room with ID {id} not found.")
+    
+    await notify_clients(f"Nova reserva criada: {response['body']}")
     
     return JSONResponse(content=response['body'], status_code=response['status_code'])
 

@@ -1,6 +1,5 @@
 from psycopg2.extensions import connection
 from typing import Dict, Tuple, List
-from datetime import date, time
 
 
 class ReservationRepository:
@@ -25,7 +24,7 @@ class ReservationRepository:
         with self.conn.cursor() as cursor:
             cursor.execute(
                 '''
-                UPDATE reservasion
+                UPDATE reservation
                 SET status=%s
                 WHERE id=%s
                 ''', (status, reservation_id,)

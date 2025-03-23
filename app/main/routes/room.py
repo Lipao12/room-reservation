@@ -32,7 +32,6 @@ async def get_rooms(room_repository: RoomRepository = Depends(get_room_repositor
         raise HTTPException(status_code=404, detail="No rooms found.")
     return JSONResponse(content=response['body'], status_code=response['status_code'])
 
-
 @router.get("/rooms/{id}")
 async def get_room_by_id(id: str, room_repository: RoomRepository = Depends(get_room_repository)):
     """
@@ -45,7 +44,6 @@ async def get_room_by_id(id: str, room_repository: RoomRepository = Depends(get_
     if not response['body']:
         raise HTTPException(status_code=404, detail=f"Room with ID {id} not found.")
     return JSONResponse(content=response['body'], status_code=response['status_code'])
-
 
 @router.post("/rooms")
 async def create_room(room_info: Dict = Body(), room_repository: RoomRepository = Depends(get_room_repository)):
@@ -68,7 +66,6 @@ async def create_room(room_info: Dict = Body(), room_repository: RoomRepository 
     if response['status_code'] != 201:
         raise HTTPException(status_code=response['status_code'], detail=response['body'])
     return JSONResponse(content=response['body'], status_code=response['status_code'])
-
 
 @router.delete("/rooms/{id}")
 async def delete_rooms(id: str, room_repository: RoomRepository = Depends(get_room_repository)):
