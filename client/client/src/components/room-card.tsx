@@ -1,11 +1,11 @@
 interface RoomCardProps {
-  id: string;
+  id?: string;
   name: string;
   capacity: number;
   onClick: () => void;
 }
 
-export const RoomCard = ({ id, name, capacity, onClick }: RoomCardProps) => {
+export const RoomCard = ({ name, capacity, onClick }: RoomCardProps) => {
   return (
     <div className="bg-transparent rounded-lg shadow-md overflow-hidden border-2 border-gray-300 hover:shadow-lg transition-shadow">
       <div className="p-3">
