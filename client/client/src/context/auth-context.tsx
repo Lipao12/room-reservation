@@ -7,7 +7,8 @@ interface AuthContextType {
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 }
-export const base_url = "http://127.0.0.1:8000";
+export const base_url = import.meta.env.VITE_API_BASE_URL; //"http://127.0.0.1:8000";
+console.log(base_url);
 const AuthContext = createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
