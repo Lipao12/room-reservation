@@ -8,11 +8,12 @@ load_dotenv()
 
 class DbConnectionHandler:
     def __init__(self)->None:
-        self.user = os.getenv('USER')
-        self.password = os.getenv('PASSWORD')
-        self.host = os.getenv('HOST')
-        self.port = os.getenv('PORT')
-        self.database = os.getenv('DATABASE')
+        self.database_url = os.getenv('DATABASE_URL')
+        #self.user = os.getenv('USER')
+        #self.password = os.getenv('PASSWORD')
+        #self.host = os.getenv('HOST')
+        #self.port = os.getenv('PORT')
+        #self.database = os.getenv('DATABASE')
         self.__conn = None
     
     def connect(self)->None:
