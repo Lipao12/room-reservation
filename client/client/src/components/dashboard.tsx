@@ -29,7 +29,7 @@ export default function Dashboard() {
     reservations: true,
   });
   const [showReservationForm, setShowReservationForm] = useState(false);
-  const user_info = JSON.parse(localStorage.getItem("user") || null);
+  const user_info = JSON.parse(localStorage.getItem("user") || "");
 
   const fetchRoom = async () => {
     try {
