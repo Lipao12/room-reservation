@@ -29,7 +29,13 @@ html = """
     </head>
     <body>
         <h1>WebSocket Test</h1>
-        <button onclick="connect()">Conectar</button>
+        
+    </body>
+</html>
+
+"""
+"""
+<button onclick="connect()">Conectar</button>
         <button onclick="sendReservationRequest()">Enviar Pedido de Reserva</button>
         <p id="status">Status: Desconectado</p>
         <p id="response">Resposta: Nenhuma</p>
@@ -62,12 +68,7 @@ html = """
                     alert("Por favor, insira um ID da Sala.");
                 }
             }
-        </script>
-    </body>
-</html>
-
-"""
-
+        </script>"""
 @app.get("/")
 async def get():
     return HTMLResponse(html)
