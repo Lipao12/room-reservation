@@ -16,7 +16,7 @@ class RoomCreator:
 
             self.room_repository.create_room(room_info)
             return{
-                'body': {"room_id": id},
+                'body': {"room": room_info},
                 'status_code': 201
             }
 

@@ -23,9 +23,14 @@ class UserAuthController:
                 "sub": user[2], #email
                 "exp": datetime.utcnow() + timedelta(hours=1)
             }
+            user_data = {
+                "id": user[0],
+                "name": user[1]
+            }
+
             token = jwt.encode(token_data, SECRET_KEY, algorithm="HS256")
             return {
-                'body':{"access_token": token, "token_type": "bearer"},
+                'body':{"access_token": token, "user": user_data,"token_type": "bearer"},
                 'status_code': 201
                 }
         

@@ -1,6 +1,7 @@
 from fastapi import Depends, APIRouter, Body, HTTPException
 from fastapi.responses import JSONResponse
 from typing import Dict
+import json
 
 # Importação o gerente de conexões
 from main.models.settings.db_communication import db_connection_handler
@@ -13,7 +14,10 @@ from main.models.repositories.room_repository import RoomRepository
 
 # Importação dos Controllers
 from main.controllers.room_creator import RoomCreator
-from main.controllers.room_finder import RoomFinder 
+from main.controllers.room_finder import RoomFinder
+
+# Importação dos necessários para WebSocket
+from .websocket import connected_clients, notify_all
 
 def get_room_repository():
     conn = db_connection_handler.get_connection()
@@ -65,6 +69,12 @@ async def create_room(room_info: Dict = Body(), room_repository: RoomRepository 
     response = controller.create(room_info)
     if response['status_code'] != 201:
         raise HTTPException(status_code=response['status_code'], detail=response['body'])
+    
+    await notify_all(json.dumps({
+    "type": "new_room",
+    "data": response["body"]["room"]
+    }))
+    
     return JSONResponse(content=response['body'], status_code=response['status_code'])
 
 @router.delete("/rooms/{id}")

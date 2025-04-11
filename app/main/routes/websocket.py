@@ -1,5 +1,5 @@
 from typing import Dict, List
-from fastapi import APIRouter, WebSocket
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 import httpx
 
@@ -30,6 +30,46 @@ async def websocket_endpoint(websocket: WebSocket):
         else:
             await websocket.send_text(f"Mensagem recebida: {data}")
 '''
+connected_clients: List[WebSocket] = []
+
+async def notify_all(message: str):
+    for ws in connected_clients:
+        try:
+            await ws.send_text(message)
+        except Exception:
+            connected_clients.remove(ws)
+
+async def notify_client(websocket: WebSocket, message: str):
+    try:
+        await websocket.send_text(message)
+    except Exception as e:
+        print(f"Erro ao notificar cliente: {e}")
+        if websocket in connected_clients:
+            connected_clients.remove(websocket)
+
+@router.websocket("/ws/rooms")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    connected_clients.append(websocket)
+    try:
+        while True:
+            await websocket.receive_text()  # opcional: pode ignorar se for só para enviar
+    except Exception as e:
+        print(f"WebSocket desconectado: {e}")
+    finally:
+        connected_clients.remove(websocket)
+
+client_sockets: Dict[str, WebSocket] = {} 
+@router.websocket("/ws/reservations")
+async def reservation_updates(websocket: WebSocket, user_id: str):
+    await websocket.accept()
+    client_sockets[user_id] = websocket
+    try:
+        while True:
+            await websocket.receive_text()  # Mantém conexão aberta
+    except WebSocketDisconnect:
+        del client_sockets[user_id]
+
 
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

@@ -4,8 +4,18 @@ from ..routes.auth import router as auth_router
 from ..routes.reservation import router as reservation_router
 from ..routes.websocket import router as ws_router
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(room_router)
 app.include_router(auth_router)
 app.include_router(reservation_router)

@@ -16,6 +16,10 @@ from main.models.repositories.reservation_repository import ReservationRepositor
 from main.controllers.reservation_creator import ReservationCreator
 from main.controllers.reservation_finder import ReservationFinder
 
+# Importação dos necessários para WebSocket
+from .websocket import notify_client
+import json
+
 def get_reservation_repository():
     conn = db_connection_handler.get_connection()
     return ReservationRepository(conn)
@@ -30,9 +34,14 @@ async def create_reservation(reservation_data: Dict = Body(), reservation_reposi
     if not response['body']:
         raise HTTPException(status_code=404, detail=f"Room with ID {id} not found.")
     
-    await notify_clients(f"Nova reserva criada: {response['body']}")
-    
-    return JSONResponse(content=response['body'], status_code=response['status_code'])
+    #await notify_clients(f"Nova reserva criada: {response['body']}")
+    #await notify_all("nova_reserva")
+    '''await notify_client(json.dumps({
+    "type": "reservation_created",
+    "data": response["body"]
+    }))'''
+
+    return JSONResponse(content=response['body']["reservation_id"], status_code=response['status_code'])
 
 @router.delete("/reservations/{id}")
 async def delete_reservation(id: str, reservation_repository: ReservationRepository = Depends(get_reservation_repository)):

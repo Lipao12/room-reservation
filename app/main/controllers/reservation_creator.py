@@ -33,7 +33,7 @@ class ReservationCreator:
 
             self.reservation_repository.create_reservation(reservation_info)
             return{
-                'body': {"reservation_id": id},
+                'body': {"reservation": reservation_info, "reservation_id":id},
                 'status_code': 201
             }
 
